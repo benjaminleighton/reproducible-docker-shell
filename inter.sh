@@ -8,7 +8,8 @@ do
   read line
   #echo sudo docker run $instance $line
   instance=$(sudo docker run -d $instance $line) 
-  sudo docker wait $instance
+  sudo docker wait $instance > /dev/null
+  sudo docker logs $instance 
   instance=$(sudo docker commit $instance)
 done
 
