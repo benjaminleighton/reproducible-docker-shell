@@ -1,6 +1,9 @@
 #!/bin/bash
 set -o history -o histexpand
 LAST_COMMAND=$(fc -nl -1)
-echo "CMD "$LAST_COMMAND >> /current 
+if [ $? = 0 ]
+then
+	echo "RUN "$LAST_COMMAND >> /host/current 
+fi
 CURRENT_DIR=$(pwd | sed 's/^ *//')
-echo "WORKDIR "$CURRENT_DIR >> /current 
+echo "WORKDIR "$CURRENT_DIR >> /host/current 
