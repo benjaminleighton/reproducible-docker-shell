@@ -3,7 +3,32 @@ set -o history -o histexpand
 LAST_COMMAND=$(fc -nl -1)
 if [ $? = 0 ]
 then
-	echo "RUN "$LAST_COMMAND >> /host/current 
+	LINE_ARRAY=($LAST_COMMAND)
+	FIRST_WORD=${LINE_ARRAY[0]}
+	REST_ARRAY=${LINE_ARRAY[@]:1}
+        REST=${REST_ARRAY[*]}   
+        if [ $FIRST_WORD == 'SHA' ]
+        then
+		echo "Checking Workflow Please Wait..."   
+		echo $LAST_COMMAND >> /host/current 
+		SHA_RESULT=$(sha1sum $REST)
+		echo "Result in this container is $SHA_RESULT"
+		while [ ! -f /host/sha1sum ]
+		do
+		  sleep 1 
+		done
+		SHA_RESULT_REPRODUCED=$(cat /host/sha1sum)
+		rm /host/sha1sum
+		echo "Result in reproduced container is $SHA_RESULT_REPRODUCED" 
+        	if [ "$SHA_RESULT" == "$SHA_RESULT_REPRODUCED" ]
+		then
+			echo "Result Sucessfully Reproduced"
+		else
+			echo "Failed to Sucessfully Reproduce Result"
+		fi
+	else
+		echo "RUN "$LAST_COMMAND >> /host/current 
+	fi 
 fi
 CURRENT_DIR=$(pwd | sed 's/^ *//')
 echo "WORKDIR "$CURRENT_DIR >> /host/current 
