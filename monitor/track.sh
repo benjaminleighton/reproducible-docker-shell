@@ -10,15 +10,15 @@ then
         if [ $FIRST_WORD == 'SHA' ]
         then
 		echo "Checking Workflow Please Wait..."   
-		echo $LAST_COMMAND >> /host/current 
+		echo $LAST_COMMAND >> /monitor/current 
 		SHA_RESULT=$(sha1sum $REST)
 		echo "Result in this container is $SHA_RESULT"
-		while [ ! -f /host/sha1sum ]
+		while [ ! -f /monitor/sha1sum ]
 		do
 		  sleep 1 
 		done
-		SHA_RESULT_REPRODUCED=$(cat /host/sha1sum)
-		rm /host/sha1sum
+		SHA_RESULT_REPRODUCED=$(cat /monitor/sha1sum)
+		rm /shared/sha1sum
 		echo "Result in reproduced container is $SHA_RESULT_REPRODUCED" 
         	if [ "$SHA_RESULT" == "$SHA_RESULT_REPRODUCED" ]
 		then
@@ -27,8 +27,8 @@ then
 			echo "Failed to Sucessfully Reproduce Result"
 		fi
 	else
-		echo "RUN "$LAST_COMMAND >> /host/current 
+		echo "RUN "$LAST_COMMAND >> /monitor/current 
 	fi 
 fi
 CURRENT_DIR=$(pwd | sed 's/^ *//')
-echo "WORKDIR "$CURRENT_DIR >> /host/current 
+echo "WORKDIR "$CURRENT_DIR >> /monitor/current 
