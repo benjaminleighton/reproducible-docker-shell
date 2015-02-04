@@ -18,7 +18,7 @@ then
 		  sleep 1 
 		done
 		SHA_RESULT_REPRODUCED=$(cat /monitor/sha1sum)
-		rm /shared/sha1sum
+		rm /monitor/sha1sum
 		echo "Result in reproduced container is $SHA_RESULT_REPRODUCED" 
         	if [ "$SHA_RESULT" == "$SHA_RESULT_REPRODUCED" ]
 		then

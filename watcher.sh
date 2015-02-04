@@ -38,7 +38,7 @@ do
 			       #Do same thing in test container
 			       cp $1 Dockerfile
 		       	       docker build -q -t temptest . > /dev/null
-			       docker run -it temptest /bin/bash -c "sha1sum $REST > /monitor/sha1sum"
+			       docker run -v $DIR/monitor:/monitor -it temptest /bin/bash -c "sha1sum $REST > /monitor/sha1sum"
 			       rm Dockerfile
 		       fi
 	       fi    
